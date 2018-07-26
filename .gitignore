@@ -1,0 +1,15 @@
+*target*
+*.jar
+*.class
+
+.project
+.metadata
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
+.classpath
+.settings/
+
+*.launch
+
