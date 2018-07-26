@@ -31,6 +31,9 @@ public final class Date implements Comparable<Date>, Cloneable {
 		this(master.day, master.month, master.year);
 	}
 
+	/**
+	 * A date occuring at a later point in time is considered greater. In short, after is greater than before.
+	 */
 	@Override
 	public int compareTo(Date then) {
 		if (this.year != then.year) {
@@ -72,5 +75,10 @@ public final class Date implements Comparable<Date>, Cloneable {
 
 	public int getYear() {
 		return year;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%d-%d-%d", this.day, (this.month.ordinal() + 1), this.year);
 	}
 }

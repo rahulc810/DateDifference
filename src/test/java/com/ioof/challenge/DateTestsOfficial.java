@@ -38,6 +38,7 @@ public class DateTestsOfficial {
 	@Test
 	public void testNumberOfDaysInYearRange() {
 		assertEquals(1827, Calendar.numberOfDaysInYearRange(2012, 2016));
+		assertEquals(1827, Calendar.numberOfDaysInYearRange(2016, 2012));
 		assertEquals(1095, Calendar.numberOfDaysInYearRange(2009, 2011));
 		assertEquals(366, Calendar.numberOfDaysInYearRange(2012, 2012));
 	}

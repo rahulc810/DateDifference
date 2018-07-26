@@ -1,20 +1,43 @@
 package com.ioof.challenge;
 
 public interface Calendar {
+
+	/**
+	 * @param year
+	 * @return whether the given year is a leap year
+	 */
 	public static boolean isLeapYear(int year) {
-		return year % 4 == 0 || (year % 100 == 0 && year % 400 != 0);
+		return year > 0 && year % 4 == 0 || (year % 100 == 0 && year % 400 != 0);
 	}
 
+	/**
+	 * 
+	 * @param year
+	 * @return Number of days in an year, based on Leap-ness
+	 */
 	public static int numberOfDays(int year) {
 		return isLeapYear(year) ? 366 : 365;
 	}
 
+	/**
+	 * Number of days between the two years, INCLUCIVE of both years. For example
+	 * for 2005-2006 output will be 730 days
+	 *
+	 * @param startYear
+	 * @param endYear
+	 * @return Number of days between the two years, INCLUCIVE of both years
+	 */
 	public static int numberOfDaysInYearRange(int startYear, int endYear) {
-		int totalYears = endYear - startYear + 1;
+		if (endYear < startYear) {
+			int swap = endYear;
+			endYear = startYear;
+			startYear = swap;
+		}
 
+		int diffInYears = endYear - startYear + 1;
 		int leapYears = 0;
 
-		switch (totalYears % 4) {
+		switch (diffInYears % 4) {
 		case 1:
 			leapYears = isLeapYear(startYear) ? 1 : 0;
 		case 2:
@@ -25,18 +48,36 @@ public interface Calendar {
 		default:
 			break;
 		}
-		leapYears += totalYears / 4;
-		return totalYears * 365 + leapYears;
+		leapYears += diffInYears / 4;
+
+		return diffInYears * 365 + leapYears;
 	}
 
+	/**
+	 * 
+	 * @param date
+	 * @return Days passed since year started, including current day
+	 */
 	public static int daysPassedInYear(Date date) {
 		return date.getMonth().getDaysUntilMonth() + date.getDay();
 	}
 
+	/**
+	 * 
+	 * @param date
+	 * @return Days remaining for year end, excluding current day
+	 */
 	public static int daysLeftInYear(Date date) {
 		return numberOfDays(date.getYear()) - daysPassedInYear(date);
 	}
 
+	/**
+	 * 
+	 * Takes in two dates and returns the difference between them in days. The dates can be in any order.
+	 * @param dateA
+	 * @param dateB
+	 * @return Returns the difference between the dates in days, including the date days.
+	 */
 	public static int daysBetween(Date dateA, Date dateB) {
 		int datesInOrder = dateA.compareTo(dateB);
 		if (datesInOrder == 0) {
@@ -51,8 +92,7 @@ public interface Calendar {
 			after = dateA;
 		}
 
-		return Calendar.numberOfDaysInYearRange(before.year + 1, after.year - 1)
-				+ Calendar.daysLeftInYear(before)
+		return Calendar.numberOfDaysInYearRange(before.year + 1, after.year - 1) + Calendar.daysLeftInYear(before)
 				+ Calendar.daysPassedInYear(after);
 	}
 
@@ -68,10 +108,18 @@ public interface Calendar {
 			this.daysUntilMonth = daysPassed;
 		}
 
+		/**
+		 * 
+		 * @return Days passed in the current year since when this month started. 0 for Jan, 31 for Feb and so on.
+		 */
 		public int getDaysUntilMonth() {
 			return this.daysUntilMonth;
 		}
 
+		/**
+		 * 
+		 * @return Number of days in the month.
+		 */
 		public int getDaysInMonth() {
 			return daysInMonth;
 		}
@@ -80,6 +128,11 @@ public interface Calendar {
 			return day > 0 && day <= this.getDaysInMonth();
 		}
 
+		/**
+		 * 
+		 * @param month
+		 * @return Enum representation of numerical (1-12) month.
+		 */
 		static Months getMonth(int month) {
 			if (month < 1 || month > 12) {
 				throw new IllegalArgumentException("Invalid month");
