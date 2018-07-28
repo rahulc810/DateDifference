@@ -7,7 +7,7 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-public class DateTestsOfficial {
+public class DateDifferentiaorTests {
 
 	@Test
 	public void dateShouldNotBeCreated() {
