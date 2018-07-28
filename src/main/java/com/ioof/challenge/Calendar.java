@@ -7,7 +7,19 @@ public interface Calendar {
 	 * @return whether the given year is a leap year
 	 */
 	public static boolean isLeapYear(int year) {
-		return year > 0 && year % 4 == 0 || (year % 100 == 0 && year % 400 != 0);
+		if (year < 0) {
+			throw new IllegalArgumentException("Invalid year :" + year);
+		}
+
+		if (year % 4 != 0) {
+			return false;
+		} else if (year % 400 == 0) {
+			return true;
+		} else if (year % 100 == 0) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	/**
@@ -73,10 +85,13 @@ public interface Calendar {
 
 	/**
 	 * 
-	 * Takes in two dates and returns the difference between them in days. The dates can be in any order.
+	 * Takes in two dates and returns the difference between them in days. The dates
+	 * can be in any order.
+	 * 
 	 * @param dateA
 	 * @param dateB
-	 * @return Returns the difference between the dates in days, including the date days.
+	 * @return Returns the difference between the dates in days, excluding the date
+	 *         days.
 	 */
 	public static int daysBetween(Date dateA, Date dateB) {
 		int datesInOrder = dateA.compareTo(dateB);
@@ -92,8 +107,24 @@ public interface Calendar {
 			after = dateA;
 		}
 
-		return Calendar.numberOfDaysInYearRange(before.year + 1, after.year - 1) + Calendar.daysLeftInYear(before)
-				+ Calendar.daysPassedInYear(after);
+		int totalDays = 0;
+
+		switch (after.year - before.year) {
+		case 0:
+			totalDays = Calendar.numberOfDays(after.year) - Calendar.daysPassedInYear(before)
+					- Calendar.daysLeftInYear(after) - 1;
+			break;
+		case 1:
+			totalDays = Calendar.daysLeftInYear(before) + Calendar.daysPassedInYear(after);
+			break;
+		default:
+			//happy case
+			totalDays = Calendar.numberOfDaysInYearRange(before.year + 1, after.year - 1) + Calendar.daysLeftInYear(before)
+					+ Calendar.daysPassedInYear(after);
+			break;
+		}
+
+		return totalDays;
 	}
 
 	public enum Months implements Comparable<Months> {
@@ -110,7 +141,8 @@ public interface Calendar {
 
 		/**
 		 * 
-		 * @return Days passed in the current year since when this month started. 0 for Jan, 31 for Feb and so on.
+		 * @return Days passed in the current year since when this month started. 0 for
+		 *         Jan, 31 for Feb and so on.
 		 */
 		public int getDaysUntilMonth() {
 			return this.daysUntilMonth;
