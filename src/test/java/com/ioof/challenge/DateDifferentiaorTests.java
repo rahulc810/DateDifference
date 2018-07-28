@@ -31,7 +31,7 @@ public class DateDifferentiaorTests {
 	@Test
 	public void testIsLeapYear() {
 		assertTrue(Calendar.isLeapYear(2004));
-		assertTrue(Calendar.isLeapYear(1900));
+		assertFalse(Calendar.isLeapYear(1900));
 		assertFalse(Calendar.isLeapYear(2014));
 	}
 
@@ -48,12 +48,16 @@ public class DateDifferentiaorTests {
 
 		Date before = new Date(15, 6, 2012);
 		Date after = new Date(4, 7, 2014);
-
+		
 		assertEquals(750, Calendar.daysBetween(before, after));
 		assertEquals(750, Calendar.daysBetween(after, before));
 		assertEquals(0, Calendar.daysBetween(before, before));
 
 		assertEquals(2, Calendar.daysBetween(new Date(31, 12, 2012), new Date(1, 1, 2013)));
+		assertEquals(365, Calendar.daysBetween(new Date(1, 1, 2013), new Date(1, 1, 2014)));
+		assertEquals(0, Calendar.daysBetween(new Date(30, 11, 2013), new Date(1, 12, 2013)));
+		assertEquals(2, Calendar.daysBetween(new Date(10, 1, 2013), new Date(13, 1, 2013)));
+		assertEquals(367, Calendar.daysBetween(new Date(31, 12, 2012), new Date(1, 1, 2014)));
 		assertEquals(4003, Calendar.daysBetween(new Date(8, 01, 1995), new Date(24, 12, 2005)));
 		assertEquals(8616, Calendar.daysBetween(new Date(15, 4, 1969), new Date(12, 9, 1945)));
 
