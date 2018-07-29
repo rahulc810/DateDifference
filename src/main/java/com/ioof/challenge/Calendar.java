@@ -71,7 +71,10 @@ public interface Calendar {
 	 * @return Days passed since year started, including current day
 	 */
 	public static int daysPassedInYear(Date date) {
-		return date.getMonth().getDaysUntilMonth() + date.getDay();
+		// Add a day's offset if its a leap year and the date is beyond Feb
+		int leapDay = isLeapYear(date.year) && date.month.isAfter(Months.FEB) ? 1 : 0;
+
+		return date.getMonth().getDaysUntilMonth() + date.getDay() + leapDay;
 	}
 
 	/**
@@ -90,8 +93,8 @@ public interface Calendar {
 	 * 
 	 * @param dateA
 	 * @param dateB
-	 * @return Returns the difference between the dates in days, excluding the date
-	 *         days.
+	 * @return Returns the difference between the dates in days, including the start
+	 *         date and excluding the end date.
 	 */
 	public static int daysBetween(Date dateA, Date dateB) {
 		int datesInOrder = dateA.compareTo(dateB);
@@ -112,15 +115,15 @@ public interface Calendar {
 		switch (after.year - before.year) {
 		case 0:
 			totalDays = Calendar.numberOfDays(after.year) - Calendar.daysPassedInYear(before)
-					- Calendar.daysLeftInYear(after) - 1;
+					- Calendar.daysLeftInYear(after);
 			break;
 		case 1:
 			totalDays = Calendar.daysLeftInYear(before) + Calendar.daysPassedInYear(after);
 			break;
 		default:
-			//happy case
-			totalDays = Calendar.numberOfDaysInYearRange(before.year + 1, after.year - 1) + Calendar.daysLeftInYear(before)
-					+ Calendar.daysPassedInYear(after);
+			// happy case
+			totalDays = Calendar.numberOfDaysInYearRange(before.year + 1, after.year - 1)
+					+ Calendar.daysLeftInYear(before) + Calendar.daysPassedInYear(after);
 			break;
 		}
 
@@ -158,6 +161,14 @@ public interface Calendar {
 
 		public boolean isValidDay(int day) {
 			return day > 0 && day <= this.getDaysInMonth();
+		}
+
+		public boolean isAfter(Months m) {
+			return this.compareTo(m) > 0;
+		}
+
+		public boolean isBefore(Months m) {
+			return this.compareTo(m) < 0;
 		}
 
 		/**
