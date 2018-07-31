@@ -52,8 +52,10 @@ public interface Calendar {
 		switch (diffInYears % 4) {
 		case 1:
 			leapYears = isLeapYear(startYear) ? 1 : 0;
+			break;
 		case 2:
 			leapYears = isLeapYear(startYear) || isLeapYear(startYear + 1) ? 1 : 0;
+			break;
 		case 3:
 			leapYears = isLeapYear(startYear) || isLeapYear(startYear + 1) || isLeapYear(startYear + 2) ? 1 : 0;
 			break;
